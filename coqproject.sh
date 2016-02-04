@@ -15,6 +15,10 @@ DIRS=(.)
 # To put "theories" in the "FermatsTheorem" namespace:
 # NAMESPACE_theories=FermatsTheorem
 
+# Extra files (e.g. automatically-generated .v files that won't be
+# around at configure-time)
+EXTRA=()
+
 ## Implementation
 
 COQPROJECT_TMP=_CoqProject.tmp
@@ -48,5 +52,11 @@ for dir in ${DIRS[@]}; do
     echo >> $COQPROJECT_TMP
     find $dir -iname '*.v'  >> $COQPROJECT_TMP
 done
+
+for extra in ${EXTRA[@]}; do
+    echo >> $COQPROJECT_TMP
+    echo $extra >> $COQPROJECT_TMP
+done
+
 
 mv $COQPROJECT_TMP _CoqProject
