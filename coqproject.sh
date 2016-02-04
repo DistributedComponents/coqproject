@@ -58,8 +58,10 @@ for dir in ${DIRS[@]}; do
 done
 
 for extra in ${EXTRA[@]}; do
-    echo >> $COQPROJECT_TMP
-    echo $extra >> $COQPROJECT_TMP
+    if ! grep --quiet "$extra" $COQPROJECT_TMP; then
+        echo >> $COQPROJECT_TMP
+        echo $extra >> $COQPROJECT_TMP
+    fi
 done
 
 
