@@ -13,7 +13,10 @@ DIRS=(.)
 
 # Namespaces corresponding to directories. By default, everything is in "".
 # To put "theories" in the "FermatsTheorem" namespace:
-# NAMESPACE_theories=FermatsTheorem
+#   NAMESPACE_theories=FermatsTheorem
+# Note that "." can't be part of a variable name, so it's replaced by "_".
+# So, to put the current directory in the "FermatsTheorem" namespace:
+#   NAMESPACE__=FermatsTheorem
 
 # Extra files (e.g. automatically-generated .v files that won't be
 # around at configure-time)
@@ -43,6 +46,7 @@ done
 
 for dir in ${DIRS[@]}; do
     namespace_var=NAMESPACE_"$dir"
+    namespace_var=${namespace_var//./_}
     namespace=${!namespace_var:="\"\""}
     LINE="-Q $dir $namespace"
     echo $LINE >> $COQPROJECT_TMP
