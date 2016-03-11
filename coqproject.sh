@@ -11,6 +11,10 @@ DEPS=()
 # Directories containing coq files
 DIRS=(.)
 
+# Canary imports, along with error messages if imports fail
+# e.g. CANARIES=("mathcomp.ssreflect.ssreflect" "Ssreflect missing")
+CANARIES=()
+
 # Namespaces corresponding to directories. By default, everything is in "".
 # To put "theories" in the "FermatsTheorem" namespace:
 #   NAMESPACE_theories=FermatsTheorem
@@ -44,6 +48,20 @@ for dep in ${DEPS[@]}; do
     echo $LINE >> $COQPROJECT_TMP
 done
 
+COQTOP="coqtop $(cat $COQPROJECT_TMP)"
+function check_canary(){
+    echo "Require Import $@." | $COQTOP 2>&1 | grep -i error 1> /dev/null 2>&1 
+}
+i=0
+len="${#CANARIES[@]}"
+while [ $i -lt $len ]; do
+    if check_canary ${CANARIES[$i]}; then
+        echo "Error: ${CANARIES[$((i + 1))]}"
+        exit 1
+    fi
+    let "i+=2"
+done
+
 for dir in ${DIRS[@]}; do
     namespace_var=NAMESPACE_"$dir"
     namespace_var=${namespace_var//./_}
@@ -58,7 +76,7 @@ for dir in ${DIRS[@]}; do
 done
 
 for extra in ${EXTRA[@]}; do
-    if ! grep --quiet "$extra" $COQPROJECT_TMP; then
+    if ! grep --quiet "^$extra\$" $COQPROJECT_TMP; then
         echo >> $COQPROJECT_TMP
         echo $extra >> $COQPROJECT_TMP
     fi
