@@ -4,16 +4,15 @@
 ### Creates a _CoqProject file, including external dependencies.
 
 ## Configuration options
-
 # External dependencies
-DEPS=()
+# e.g. DEPS = (StructTact)
 
 # Directories containing coq files
-DIRS=(.)
+# e.g. DIRS=(theories)
+if [ -z ${DIRS+x} ]; then DIRS=(.); fi
 
 # Canary imports, along with error messages if imports fail
 # e.g. CANARIES=("mathcomp.ssreflect.ssreflect" "Ssreflect missing")
-CANARIES=()
 
 # Namespaces corresponding to directories. By default, everything is in "".
 # To put "theories" in the "FermatsTheorem" namespace:
@@ -24,14 +23,13 @@ CANARIES=()
 
 # Extra files (e.g. automatically-generated .v files that won't be
 # around at configure-time)
-EXTRA=()
-
+# e.g. EXTRA=(GeneratedFile.v)
 ## Implementation
 
 COQPROJECT_TMP=_CoqProject.tmp
 
 rm -f $COQPROJECT_TMP
-
+touch $COQPROJECT_TMP
 for dep in ${DEPS[@]}; do
     path_var="$dep"_PATH
     path=${!path_var:="../$dep"}
