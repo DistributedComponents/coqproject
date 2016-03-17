@@ -1,8 +1,11 @@
+ifeq ($(wildcard "_CoqProject"),)
+$(error "Run ./configure before running make")
+endif
+
 default: Makefile.coq
 	$(MAKE) -f Makefile.coq
 
 Makefile.coq: _CoqProject
-	test -s _CoqProject || { echo "Run coqproject.sh before running make"; exit 1 }
 	coq_makefile -f _CoqProject -o Makefile.coq
 
 clean:
