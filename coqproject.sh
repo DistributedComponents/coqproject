@@ -3,28 +3,11 @@
 ### coqproject.sh
 ### Creates a _CoqProject file, including external dependencies.
 
-## Configuration options
-# External dependencies
-# e.g. DEPS = (StructTact)
+### See README.md for a description.
 
-# Directories containing coq files
-# e.g. DIRS=(theories)
-if [ -z ${DIRS+x} ]; then DIRS=(.); fi
-
-# Canary imports, along with error messages if imports fail
-# e.g. CANARIES=("mathcomp.ssreflect.ssreflect" "Ssreflect missing")
-
-# Namespaces corresponding to directories. By default, everything is in "".
-# To put "theories" in the "FermatsTheorem" namespace:
-#   NAMESPACE_theories=FermatsTheorem
-# Note that "." can't be part of a variable name, so it's replaced by "_".
-# So, to put the current directory in the "FermatsTheorem" namespace:
-#   NAMESPACE__=FermatsTheorem
-
-# Extra files (e.g. automatically-generated .v files that won't be
-# around at configure-time)
-# e.g. EXTRA=(GeneratedFile.v)
 ## Implementation
+
+if [ -z ${DIRS+x} ]; then DIRS=(.); fi
 
 COQPROJECT_TMP=_CoqProject.tmp
 
