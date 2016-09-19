@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ### coqproject.sh
 ### Creates a _CoqProject file, including external dependencies.
@@ -13,6 +13,21 @@ COQPROJECT_TMP=_CoqProject.tmp
 
 rm -f $COQPROJECT_TMP
 touch $COQPROJECT_TMP
+
+function dep_dirs_lines(){
+  dep_dirs_var="$2"_DIRS
+  local -a 'dep_dirs=("${'"$dep_dirs_var"'[@]}")'
+  if [ "x${dep_dirs[0]}" = "x" ]; then dep_dirs=(.); fi
+  for dep_dir in "${dep_dirs[@]}"; do
+      namespace_var=NAMESPACE_"$2"_"$dep_dir"
+      namespace_var=${namespace_var//\//_}
+      namespace_var=${namespace_var//-/_}
+      namespace_var=${namespace_var//./_}
+      namespace=${!namespace_var:=$2}
+      LINE="-Q $1/$dep_dir/ $namespace"
+      echo $LINE >> $COQPROJECT_TMP
+  done
+}
 for dep in ${DEPS[@]}; do
     path_var="$dep"_PATH
     path=${!path_var:="../$dep"}
@@ -25,8 +40,8 @@ for dep in ${DEPS[@]}; do
     path=$(pwd)
     popd > /dev/null
     echo "$dep found at $path"
-    LINE="-Q $path $dep"
-    echo $LINE >> $COQPROJECT_TMP
+
+    dep_dirs_lines $path $dep
 done
 
 COQTOP="coqtop $(cat $COQPROJECT_TMP)"
@@ -45,9 +60,11 @@ done
 
 for dir in ${DIRS[@]}; do
     namespace_var=NAMESPACE_"$dir"
+    namespace_var=${namespace_var//\//_}
+    namespace_var=${namespace_var//-/_}
     namespace_var=${namespace_var//./_}
     namespace=${!namespace_var:="\"\""}
-    LINE="-Q $dir $namespace"
+    LINE="-Q $dir/ $namespace"
     echo $LINE >> $COQPROJECT_TMP
 done
 
