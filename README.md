@@ -74,7 +74,7 @@ For example, if the project imports modules from the `A` subdirectory
 with namespace `Foo`, but imports modules from the `B` subdirectory with
 the empty namespace, then the configure script should include
 ```
-NAMESPACE_A=Foo`
+NAMESPACE_A=Foo
 ```
 
 Note that "." can't be part of a variable name, so it's replaced by "_".
