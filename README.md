@@ -24,7 +24,7 @@ source script/coqproject.sh
 
 The configure script sources `coqproject.sh` instead of running it so
 that environment variables are handled correctly (bash currently
-doesn't support exporting array variables such as `DIRS` and
+does not support exporting array variables such as `DIRS` and
 `CANARIES`). This script will have to be re-run any time a file is
 added to the project.
 
@@ -89,7 +89,7 @@ the empty namespace, then the configure script should include
 NAMESPACE_A=Foo
 ```
 
-Note that "." can't be part of a variable name, so it's replaced by "_".
+Note that "." cannot be part of a variable name, so it is replaced by "_".
 So, to put the current directory in the namespace `Bar`, set
 ```bash
 NAMESPACE__=Bar
