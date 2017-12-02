@@ -1,6 +1,6 @@
 # coqproject.sh
 
-This is a simple script to create a `_CoqProject` file for a
+This is a simple bash script to create a `_CoqProject` file for a
 [Coq](https://coq.inria.fr) development, including external
 dependencies and namespaces. The resulting file should work with
 [`coq_makefile`](https://coq.inria.fr/distrib/current/refman/tools.html#Makefile),
