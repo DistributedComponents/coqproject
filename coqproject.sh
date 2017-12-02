@@ -86,5 +86,4 @@ for extra in ${EXTRA[@]}; do
     fi
 done
 
-
 mv $COQPROJECT_TMP _CoqProject
