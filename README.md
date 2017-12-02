@@ -32,7 +32,7 @@ A sample `Makefile` is included as well.
 ### External dependencies
 
 The `DEPS` variables is a list of external dependencies for the
-project. For example, the following records depend on the library
+project. For example, the following records a dependency on the library
 `Verdi`:
 
 ```bash
@@ -40,16 +40,17 @@ DEPS=(Verdi)
 ```
 
 Each element of the list names a dependency.  By default, each
-dependency is expected to be found in Coq's `user-contrib` directory.
+dependency is expected to be found in Coq's global `user-contrib` directory.
 To customize this location for a dependency `X`, set the environment
 variable `X_PATH`. For example, if `Verdi` is located in
-`/path/to/Verdi`, then set:
+`/path/to/verdi`, then set:
 
 ```bash
-Verdi_PATH=/path/to/Verdi
+Verdi_PATH=/path/to/verdi
 ```
 
-`coqproject.sh` will exit with error if any dependency is not found.
+`coqproject.sh` will exit with an error if a dependency is not found
+at its indicated path.
 
 
 ### Subdirectories containing Coq files
@@ -92,7 +93,7 @@ NAMESPACE__=Bar
 ```
 
 Directories (and subdirectories) of dependencies can also be associated
-with namespaces. For example, if the `lib` subdirectory of `Verdi`'
+with namespaces. For example, if the `lib` subdirectory of `Verdi`
 should be in the `Lib` namespace, set
 ```bash
 NAMESPACE_Verdi_lib=Lib
@@ -100,10 +101,10 @@ NAMESPACE_Verdi_lib=Lib
 
 ### Report missing dependencies
 
-Some libraries are expected to always be installed globally, e.g.
-`ssreflect`. `coqproject.sh` supports checking for these libraries
-using canaries, which test to see whether a given module can be
-imported.
+Some libraries are expected to always be installed globally in Coq's
+`user-contrib` directory, e.g. `ssreflect`. `coqproject.sh` supports
+checking for these libraries using canaries, which test whether
+a given module can be imported.
 
 The variable `CANARIES` contains a list, conceptually grouped into
 pairs, where the first element of each pair is a module name, and the
