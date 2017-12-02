@@ -3,7 +3,7 @@
 ### coqproject.sh
 ### Creates a _CoqProject file, including external dependencies.
 
-### See the coqproject.sh README.md file for a description.
+### See the README.md file for a description.
 
 ## Implementation
 

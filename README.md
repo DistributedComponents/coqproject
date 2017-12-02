@@ -1,9 +1,12 @@
 # coqproject.sh
 
-This is a simple script to create a `_CoqProject` file for a Coq
-development, including external dependencies and namespaces. The
-resulting file should work with `coq_makefile`, Proof General, and
-CoqIde. Users can set environment variables to configure the paths to
+This is a simple script to create a `_CoqProject` file for a
+[Coq](https://coq.inria.fr) development, including external
+dependencies and namespaces. The resulting file should work with
+[`coq_makefile`](https://coq.inria.fr/distrib/current/refman/tools.html#Makefile),
+[Proof General](https://proofgeneral.github.io), and
+[CoqIDE](https://coq.inria.fr/distrib/current/refman/coqide.html).
+Users can set environment variables to configure the paths to
 external dependencies; see below for more details.
 
 ## Getting Started
