@@ -95,9 +95,9 @@ So, to put the current directory in the namespace `Bar`, set
 NAMESPACE__=Bar
 ```
 
-Directories (and subdirectories) of dependencies can also be associated
+Subdirectories of dependencies can also be associated
 with namespaces. For example, if the `lib` subdirectory of `Verdi`
-should be in the `Lib` namespace, set
+should be in the `Lib` namespace instead of `Verdi`, set
 ```bash
 NAMESPACE_Verdi_lib=Lib
 ```
