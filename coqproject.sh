@@ -74,6 +74,10 @@ for dir in ${DIRS[@]}; do
     echo $LINE >> $COQPROJECT_TMP
 done
 
+if [ ! "x${ARG}" = "x" ]; then
+    echo "-arg \"${ARG}\"" >> $COQPROJECT_TMP
+fi
+
 for dir in ${DIRS[@]}; do
     echo >> $COQPROJECT_TMP
     find $dir -iname '*.v' -not -name '*\#*'  >> $COQPROJECT_TMP
