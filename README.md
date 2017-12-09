@@ -121,6 +121,16 @@ CANARIES=("mathcomp.ssreflect.ssreflect" "Ssreflect missing")
 will try to import `mathcomp.ssreflect.ssreflect` and report an error
 if it is not found.
 
+### Extra arguments
+
+Projects depending on libraries like `ssreflect` may want
+ignore certain warnings during proof checking, e.g.,
+"notation overridden". Such directives can be declared in
+the `ARG` variable, as in
+```bash
+ARG="-w -notation-overridden"
+```
+
 ### Extra files
 
 `coqproject.sh` works by searching for `.v` files in every directory
