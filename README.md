@@ -1,9 +1,12 @@
 # coqproject.sh
 
-This is a simple script to create a `_CoqProject` file for a Coq
-development, including external dependencies and namespaces. The
-resulting file should work with `coq_makefile`, Proof General, and
-CoqIde. Users can set environment variables to configure the paths to
+This is a simple bash script to create a `_CoqProject` file for a
+[Coq](https://coq.inria.fr) development, including external
+dependencies and namespaces. The resulting file should work with
+[`coq_makefile`](https://coq.inria.fr/distrib/current/refman/tools.html#Makefile),
+[Proof General](https://proofgeneral.github.io), and
+[CoqIDE](https://coq.inria.fr/distrib/current/refman/coqide.html).
+Users can set environment variables to configure the paths to
 external dependencies; see below for more details.
 
 ## Getting Started
@@ -15,13 +18,13 @@ like this:
 
 ```bash
 DIRS=(theories)
-CANARIES=("mathcomp.ssreflect.ssreflect", "Ssreflect required")
+CANARIES=("mathcomp.ssreflect.ssreflect" "Ssreflect missing")
 source script/coqproject.sh
 ```
 
 The configure script sources `coqproject.sh` instead of running it so
 that environment variables are handled correctly (bash currently
-doesn't support exporting array variables such as `DIRS` and
+does not support exporting array variables such as `DIRS` and
 `CANARIES`). This script will have to be re-run any time a file is
 added to the project.
 
@@ -32,24 +35,25 @@ A sample `Makefile` is included as well.
 ### External dependencies
 
 The `DEPS` variables is a list of external dependencies for the
-project. For example, the following records depend on the library
-`StructTact`:
+project. For example, the following records a dependency on the library
+`Verdi`:
 
-```
-DEPS=(StructTact)
+```bash
+DEPS=(Verdi)
 ```
 
 Each element of the list names a dependency.  By default, each
-dependency is expected to be found in the parent directory.  To
-customize this location for a dependency `X`, set the environment
-variable `X_PATH`. For example, if `StructTact` is located in
-`/path/to/StructTact`, then set
+dependency is expected to be found in Coq's global `user-contrib` directory.
+To customize this location for a dependency `X`, set the environment
+variable `X_PATH`. For example, if `Verdi` is located in
+`/path/to/verdi`, then set:
 
-```
-StructTact_PATH=/path/to
+```bash
+Verdi_PATH=/path/to/verdi
 ```
 
-`coqproject.sh` will exit with error if any dependency is not found.
+`coqproject.sh` will exit with an error if a dependency is not found
+at its indicated path.
 
 
 ### Subdirectories containing Coq files
@@ -62,10 +66,18 @@ in that directory for source files.
 
 For example, if a project contains two subdirectories `A` and `B`,
 then setting
-```
+```bash
 DIRS=(A B)
 ```
 will do the right thing.
+
+Dependencies in the `DEPS` variable can also be associated with
+subdirectories. For example, if the dependency `Verdi` has
+subdirectories `core` and `lib`, setting
+```bash
+Verdi_DIRS=(core lib)
+```
+will reflect this.
 
 By default, files from all directories are put in the empty namespace,
 but this can be customized by setting the `NAMESPACE_X` variable.
@@ -73,22 +85,29 @@ but this can be customized by setting the `NAMESPACE_X` variable.
 For example, if the project imports modules from the `A` subdirectory
 with namespace `Foo`, but imports modules from the `B` subdirectory with
 the empty namespace, then the configure script should include
-```
+```bash
 NAMESPACE_A=Foo
 ```
 
-Note that "." can't be part of a variable name, so it's replaced by "_".
+Note that "." cannot be part of a variable name, so it is replaced by "_".
 So, to put the current directory in the namespace `Bar`, set
-```
+```bash
 NAMESPACE__=Bar
+```
+
+Subdirectories of dependencies can also be associated
+with namespaces. For example, if the `lib` subdirectory of `Verdi`
+should be in the `Lib` namespace instead of `Verdi`, set
+```bash
+NAMESPACE_Verdi_lib=Lib
 ```
 
 ### Report missing dependencies
 
-Some libraries are expected to be installed globally, e.g.
-`ssreflect`. `coqproject.sh` supports checking for these libraries
-using canaries, which test to see whether a given module can be
-imported.
+Some libraries are expected to always be installed globally in Coq's
+`user-contrib` directory, e.g. `ssreflect`. `coqproject.sh` supports
+checking for these libraries using canaries, which test whether
+a given module can be imported.
 
 The variable `CANARIES` contains a list, conceptually grouped into
 pairs, where the first element of each pair is a module name, and the
@@ -96,11 +115,21 @@ second element is a message to print if the module fails to import.
 
 For example, if a project depends on `ssreflect` being globally
 installed, setting
-```
+```bash
 CANARIES=("mathcomp.ssreflect.ssreflect" "Ssreflect missing")
 ```
 will try to import `mathcomp.ssreflect.ssreflect` and report an error
 if it is not found.
+
+### Extra arguments
+
+Projects depending on libraries like `ssreflect` may want
+ignore certain warnings during proof checking, e.g.,
+"notation overridden". Such directives can be declared in
+the `ARG` variable, as in
+```bash
+ARG="-w -notation-overridden"
+```
 
 ### Extra files
 
@@ -112,7 +141,7 @@ added to `_CoqProject`.
 
 For example, if a project automatically generates a file `Foo.v` that
 is not present at configure time, then including
-```
+```bash
 EXTRA=(GeneratedFile.v)
 ```
 will ensure that `coq_makefile` knows about this file.
